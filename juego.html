@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Despertar del DRON - Juego 2D</title>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+  <div class="pantalla-principal">
+    <h1 class="titulo">El Despertar del DRON</h1>
+
+    <div class="juego-contenedor">
+      <div class="interfaz-ui">
+        <div class="jugador-ui">
+          <span class="nombre">CADETE</span>
+          <div class="barra-vida">
+            <div id="vida-jugador" class="relleno"></div>
+          </div>
+        </div>
+        
+        <div class="vs">VS</div>
+
+        <div class="jugador-ui alien">
+          <span class="nombre">DRON MK-9</span>
+          <div class="barra-vida">
+            <div id="vida-dron" class="relleno dron"></div>
+          </div>
+        </div>
+      </div>
+
+      <canvas id="canvasCombate" width="800" height="400"></canvas>
+
+      <div id="pantalla-overlay" class="overlay">
+        <h2 id="titulo-overlay">El Despertar del DRON</h2>
+        <p id="texto-overlay">El DRON infectado se dirige al reactor. Controla al Cadete y detén la amenaza.</p>
+        <button id="btn-accion" class="boton_1">Iniciar Misión</button>
+      </div>
+    </div>
+
+    <div class="controles-info">
+      <h3>Controles:</h3>
+      <p><kbd>A</kbd> / <kbd>D</kbd> Moverse | <kbd>W</kbd> Saltar | <kbd>J</kbd> Jab | <kbd>K</kbd> Cross</p>
+    </div>
+  </div>
+
+  <script src="juego.js"></script>
+</body>
+</html>
