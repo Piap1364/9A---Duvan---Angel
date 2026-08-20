@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alistamiento · Academia Espacial</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+  :root{--fondo:#0B132B;--texto:#F8F9FA;--acento:#00D4FF;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Poppins',sans-serif;background:var(--fondo);color:var(--texto);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;
+    background-image:radial-gradient(circle at 20% 15%,rgba(0,212,255,.10),transparent 40%),radial-gradient(circle at 80% 85%,rgba(0,212,255,.07),transparent 40%);}
+  h1{font-size:40px;text-align:center;margin-bottom:6px;}
+  p{text-align:center;margin-bottom:24px;opacity:.85;font-size:16px;}
+  .marca{font-weight:800;color:var(--acento);letter-spacing:1px;margin-bottom:18px;font-size:18px;}
+  .tarjeta{width:100%;max-width:420px;background:rgba(255,255,255,.03);border:1px solid rgba(0,212,255,.3);border-radius:16px;padding:32px;box-shadow:0 0 30px rgba(0,212,255,.08);}
+  .campo{width:100%;margin-bottom:16px;}
+  label{display:block;font-size:14px;margin-bottom:6px;opacity:.9;}
+  input{width:100%;font-family:inherit;font-size:16px;padding:12px 14px;background:rgba(255,255,255,.06);border:2px solid rgba(0,212,255,.4);border-radius:12px;color:var(--texto);outline:none;transition:all .3s;}
+  input:focus{border-color:var(--acento);box-shadow:0 0 12px rgba(0,212,255,.35);}
+  .btn{width:100%;font-family:inherit;font-size:16px;padding:12px 24px;background:var(--acento);color:#0B132B;border:none;border-radius:12px;cursor:pointer;font-weight:600;transition:all .3s;}
+  .btn:hover{box-shadow:0 0 18px rgba(0,212,255,.7);transform:translateY(-2px);}
+  .error{color:#ff4d6d;font-size:14px;text-align:center;margin-top:12px;min-height:20px;}
+</style>
+</head>
+<body>
+  <div class="tarjeta">
+    <p class="marca">🚀 ACADEMIA ESPACIAL</p>
+    <h1>Alistamiento</h1>
+    <p>Cadete, ingresa tus credenciales para entrar al programa espacial.</p>
+    <form id="form-alistamiento">
+      <div class="campo">
+        <label for="usuario">Nombre de usuario</label>
+        <input type="text" id="usuario" required autocomplete="username">
+      </div>
+      <div class="campo">
+        <label for="clave">Contraseña</label>
+        <input type="password" id="clave" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn">Registrarse / Entrar</button>
+      <p class="error" id="mensaje"></p>
+    </form>
+  </div>
+<script>
+  const form = document.getElementById('form-alistamiento');
+  const mensaje = document.getElementById('mensaje');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const nombre = document.getElementById('usuario').value.trim();
+    const clave = document.getElementById('clave').value;
+    if(!nombre || !clave){ mensaje.textContent = 'Ingresa usuario y contraseña.'; return; }
+    const guardado = JSON.parse(localStorage.getItem('cadete'));
+    if(guardado){
+      if(guardado.nombre !== nombre || guardado.clave !== clave){
+        mensaje.textContent = 'Credenciales incorrectas. Intenta de nuevo.';
+        return;
+      }
+    }else{
+      localStorage.setItem('cadete', JSON.stringify({nombre:nombre, clave:clave, fecha:new Date().toLocaleString()}));
+    }
+    sessionStorage.setItem('sesion', nombre);
+    location.href = 'index.html';
+  });
+</script>
+</body>
+</html>

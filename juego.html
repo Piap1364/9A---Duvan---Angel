@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Combate Orbital · Academia Espacial</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+  :root{--fondo:#0B132B;--texto:#F8F9FA;--acento:#00D4FF;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Poppins',sans-serif;background:var(--fondo);color:var(--texto);min-height:100vh;display:flex;flex-direction:column;
+    background-image:radial-gradient(circle at 20% 15%,rgba(0,212,255,.10),transparent 40%),radial-gradient(circle at 80% 85%,rgba(0,212,255,.07),transparent 40%);}
+  .encabezado{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;padding:18px 30px;border-bottom:1px solid rgba(0,212,255,.25);}
+  .logo{font-size:20px;font-weight:800;letter-spacing:1px;color:var(--acento);text-decoration:none;}
+  .navegacion{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .nav-link{color:var(--texto);text-decoration:none;padding:8px 14px;border:1px solid transparent;border-radius:12px;transition:all .3s;font-size:14px;}
+  .nav-link:hover{color:var(--acento);border-color:var(--acento);}
+  .nav-link.activo{background:rgba(0,212,255,.15);color:var(--acento);}
+  .btn{display:inline-block;font-family:inherit;font-size:16px;padding:12px 24px;color:var(--acento);background:transparent;border:2px solid var(--acento);border-radius:12px;cursor:pointer;text-decoration:none;transition:all .3s ease;text-align:center;}
+  .btn:hover{background:var(--acento);color:#0B132B;box-shadow:0 0 18px rgba(0,212,255,.7);transform:translateY(-2px);}
+  .btn-mini{padding:8px 14px;font-size:14px;}
+  .btn-primario{background:var(--acento);color:#0B132B;border-color:var(--acento);font-weight:600;}
+  .contenido{flex:1;width:100%;max-width:900px;margin:0 auto;padding:30px 24px;display:flex;flex-direction:column;align-items:center;}
+  h1{font-size:32px;text-align:center;margin-bottom:4px;}
+  .sub{text-align:center;opacity:.85;margin:8px auto 20px;font-size:14px;}
+  .juego-wrap{width:100%;max-width:800px;position:relative;margin-bottom:20px;}
+  .barras{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px;}
+  .barra-grupo{flex:1;display:flex;flex-direction:column;gap:4px;}
+  .barra-nombre{font-size:13px;font-weight:600;display:flex;justify-content:space-between;}
+  .barra-vida{width:100%;height:18px;background:rgba(255,255,255,.08);border-radius:9px;overflow:hidden;border:1px solid rgba(0,212,255,.3);}
+  .barra-relleno{height:100%;background:linear-gradient(90deg,#00D4FF,#00ff88);border-radius:9px;transition:width .3s;}
+  .barra-relleno.dron{background:linear-gradient(90deg,#ff4d6d,#ff8800);}
+  .vs-texto{font-size:20px;font-weight:800;color:var(--acento);text-align:center;flex-shrink:0;padding:0 8px;}
+  canvas{width:100%;border-radius:16px;border:1px solid rgba(0,212,255,.3);display:block;background:#060d20;}
+  .overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(6,13,32,.92);border-radius:16px;z-index:10;text-align:center;padding:30px;}
+  .overlay h2{font-size:28px;color:var(--acento);margin-bottom:10px;}
+  .overlay p{opacity:.8;margin-bottom:20px;max-width:500px;}
+  .overlay .stats{display:flex;gap:24px;margin-bottom:20px;}
+  .overlay .stat{text-align:center;}
+  .overlay .stat span{display:block;font-size:28px;font-weight:800;color:var(--acento);}
+  .overlay .stat small{opacity:.6;font-size:12px;}
+  .controles{width:100%;max-width:800px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:10px;}
+  .control{background:rgba(255,255,255,.04);border:1px solid rgba(0,212,255,.2);border-radius:10px;padding:10px;text-align:center;font-size:12px;}
+  .control kbd{display:inline-block;background:rgba(0,212,255,.15);color:var(--acento);padding:3px 8px;border-radius:6px;font-family:inherit;font-weight:600;margin:2px;}
+  footer{text-align:center;padding:20px;opacity:.55;font-size:14px;border-top:1px solid rgba(0,212,255,.2);}
+  @media(max-width:600px){
+    h1{font-size:24px;}
+    .encabezado{justify-content:center;}
+    .controles{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+  <header class="encabezado">
+    <a href="index.html" class="logo">🚀 Academia Espacial</a>
+    <nav class="navegacion">
+      <a href="index.html" class="nav-link">Menú</a>
+      <a href="juego.html" class="nav-link activo">Combate</a>
+      <a href="diario.html" class="nav-link">Diario</a>
+      <a href="tareas.html" class="nav-link">Tareas</a>
+      <a href="historial.html" class="nav-link">Historial</a>
+      <button class="btn btn-mini" id="btn-salir">Salir</button>
+    </nav>
+  </header>
+
+  <main class="contenido">
+    <h1>⚔️ Combate Orbital</h1>
+    <p class="sub">Enfrenta al DRON infectado en la arena espacial.</p>
+
+    <div class="juego-wrap">
+      <div class="barras">
+        <div class="barra-grupo">
+          <div class="barra-nombre"><span>CADETE</span><span id="vida-jugador-txt">100</span></div>
+          <div class="barra-vida"><div class="barra-relleno" id="barra-jugador" style="width:100%"></div></div>
+        </div>
+        <div class="vs-texto">VS</div>
+        <div class="barra-grupo">
+          <div class="barra-nombre"><span>DRON MK-9</span><span id="vida-dron-txt">100</span></div>
+          <div class="barra-vida"><div class="barra-relleno dron" id="barra-dron" style="width:100%"></div></div>
+        </div>
+      </div>
+
+      <canvas id="canvas" width="800" height="400"></canvas>
+
+      <div id="overlay" class="overlay">
+        <h2 id="ov-titulo">Combate Orbital</h2>
+        <p id="ov-texto">El DRON infectado se ha activado en la arena. Controla al Cadete y derótalo antes de que llegue al reactor.</p>
+        <div class="stats" id="ov-stats" style="display:none">
+          <div class="stat"><span id="ov-dano">0</span><small>Daño total</small></div>
+          <div class="stat"><span id="ov-combo">0</span><small>Mejor combo</small></div>
+          <div class="stat"><span id="ov-tiempo">0s</span><small>Tiempo</small></div>
+        </div>
+        <button class="btn btn-primario" id="btn-accion">Iniciar Misión</button>
+      </div>
+    </div>
+
+    <div class="controles">
+      <div class="control"><kbd>A</kbd> / <kbd>D</kbd><br>Moverse</div>
+      <div class="control"><kbd>W</kbd><br>Saltar</div>
+      <div class="control"><kbd>J</kbd><br>Jab (rápido)</div>
+      <div class="control"><kbd>K</kbd><br>Cross (fuerte)</div>
+      <div class="control"><kbd>S</kbd><br>Agacharse</div>
+      <div class="control"><kbd>ESPACIO</kbd><br>Patada</div>
+    </div>
+  </main>
+
+  <footer>Academia Espacial · Sector 9-A · 3026</footer>
+
+<script>
+(function(){
+  const cadete = JSON.parse(localStorage.getItem('cadete'));
+  if(!cadete){ location.href = 'registro.html'; }
+  document.getElementById('btn-salir').addEventListener('click', function(){
+    sessionStorage.removeItem('sesion');
+    location.href = 'registro.html';
+  });
+
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 800, H = 400;
+  const GROUND = H - 60;
+  const GRAVITY = 0.6;
+
+  const barraJugador = document.getElementById('barra-jugador');
+  const barraDron = document.getElementById('barra-dron');
+  const vidaJugadorTxt = document.getElementById('vida-jugador-txt');
+  const vidaDronTxt = document.getElementById('vida-dron-txt');
+  const overlay = document.getElementById('overlay');
+  const ovTitulo = document.getElementById('ov-titulo');
+  const ovTexto = document.getElementById('ov-texto');
+  const ovStats = document.getElementById('ov-stats');
+  const btnAccion = document.getElementById('btn-accion');
+  const ovDano = document.getElementById('ov-dano');
+  const ovCombo = document.getElementById('ov-combo');
+  const ovTiempo = document.getElementById('ov-tiempo');
+
+  let teclas = {};
+  let jugando = false;
+  let intervaloJuego = null;
+  let tiempoInicio = 0;
+
+  document.addEventListener('keydown', function(e){ teclas[e.key.toLowerCase()] = true; });
+  document.addEventListener('keyup', function(e){ teclas[e.key.toLowerCase()] = false; });
+
+  function crearPersonaje(x, color){
+    return {
+      x: x, y: GROUND, vx: 0, vy: 0,
+      w: 40, h: 70,
+      vida: 100, color: color,
+      enSuelo: true, agachado: false,
+      atacando: false, tipoAtaque: null, timerAtaque: 0,
+      recibeDano: false, timerDano: 0,
+      cooldownAtaque: 0,
+      sprites: []
+    };
+  }
+
+  let cadeteJugador, dron;
+  let particulas = [];
+  let combo = 0, mejorCombo = 0, danoTotal = 0;
+
+  function iniciarCombate(){
+    cadeteJugador = crearPersonaje(150, '#00D4FF');
+    dron = crearPersonaje(600, '#ff4d6d');
+    dron.iaTimer = 0;
+    dron.iaAccion = null;
+    particulas = [];
+    combo = 0; mejorCombo = 0; danoTotal = 0;
+    tiempoInicio = Date.now();
+    jugando = true;
+    overlay.style.display = 'none';
+    loop();
+  }
+
+  function loop(){
+    if(!jugando) return;
+    actualizar();
+    dibujar();
+    intervaloJuego = requestAnimationFrame(loop);
+  }
+
+  function actualizar(){
+    let p = cadeteJugador;
+    let d = dron;
+
+    p.agachado = false;
+    if(teclas['s'] && p.enSuelo){ p.agachado = true; }
+
+    if(!p.atacando && p.cooldownAtaque <= 0){
+      p.vx = 0;
+      if(teclas['a']) p.vx = -4;
+      if(teclas['d']) p.vx = 4;
+      if(teclas['w'] && p.enSuelo){ p.vy = -12; p.enSuelo = false; }
+    }
+
+    if(p.cooldownAtaque > 0) p.cooldownAtaque--;
+    if(!p.atacando && p.cooldownAtaque <= 0){
+      if(teclas['j']){
+        p.atacando = true; p.tipoAtaque = 'jab'; p.timerAtaque = 12;
+        p.cooldownAtaque = 15;
+        if(Math.abs(p.x - d.x) < 80 && Math.abs(p.y - d.y) < 50){
+          golpear(d, 6, 'jab');
+        }
+      } else if(teclas['k']){
+        p.atacando = true; p.tipoAtaque = 'cross'; p.timerAtaque = 20;
+        p.cooldownAtaque = 25;
+        if(Math.abs(p.x - d.x) < 90 && Math.abs(p.y - d.y) < 50){
+          golpear(d, 14, 'cross');
+        }
+      } else if(teclas[' ']){
+        teclas[' '] = false;
+        p.atacando = true; p.tipoAtaque = 'patada'; p.timerAtaque = 18;
+        p.cooldownAtaque = 22;
+        if(Math.abs(p.x - d.x) < 100 && Math.abs(p.y - d.y) < 50){
+          golpear(d, 10, 'patada');
+        }
+      }
+    }
+
+    if(p.atacando){
+      p.timerAtaque--;
+      if(p.timerAtaque <= 0) p.atacando = false;
+    }
+    if(p.timerDano > 0){ p.timerDano--; p.recibeDano = p.timerDano % 4 < 2; }
+
+    p.vy += GRAVITY;
+    p.x += p.vx; p.y += p.vy;
+    if(p.x < 20) p.x = 20;
+    if(p.x > W - 20) p.x = W - 20;
+    if(p.y >= GROUND){ p.y = GROUND; p.vy = 0; p.enSuelo = true; }
+
+    actualizarIA(d, p);
+
+    d.vy += GRAVITY;
+    d.x += d.vx; d.y += d.vy;
+    if(d.x < 20) d.x = 20;
+    if(d.x > W - 20) d.x = W - 20;
+    if(d.y >= GROUND){ d.y = GROUND; d.vy = 0; d.enSuelo = true; }
+
+    if(d.timerDano > 0){ d.timerDano--; d.recibeDano = d.timerDano % 4 < 2; }
+    if(d.atacando){
+      d.timerAtaque--;
+      if(d.timerAtaque <= 0) d.atacando = false;
+    }
+    if(d.cooldownAtaque > 0) d.cooldownAtaque--;
+
+    for(let i = particulas.length - 1; i >= 0; i--){
+      particulas[i].life--;
+      particulas[i].x += particulas[i].vx;
+      particulas[i].y += particulas[i].vy;
+      particulas[i].vy += 0.1;
+      if(particulas[i].life <= 0) particulas.splice(i, 1);
+    }
+
+    actualizarBarras();
+
+    if(p.vida <= 0){
+      finalizarCombate(false);
+    } else if(d.vida <= 0){
+      finalizarCombate(true);
+    }
+  }
+
+  function actualizarIA(d, p){
+    if(d.cooldownAtaque > 0) return;
+    d.vx = 0;
+    let dist = p.x - d.x;
+
+    d.iaTimer = (d.iaTimer || 0) + 1;
+
+    if(d.atacando){
+      d.timerAtaque--;
+      if(d.timerAtaque <= 0) d.atacando = false;
+      return;
+    }
+
+    if(Math.abs(dist) < 85 && Math.abs(p.y - d.y) < 50){
+      let rng = Math.random();
+      if(rng < 0.04 && d.cooldownAtaque <= 0){
+        d.atacando = true; d.tipoAtaque = 'jab'; d.timerAtaque = 12;
+        d.cooldownAtaque = 20;
+        if(Math.abs(d.x - p.x) < 80){
+          golpearC(p, 4);
+        }
+      } else if(rng < 0.06 && d.cooldownAtaque <= 0){
+        d.atacando = true; d.tipoAtaque = 'cross'; d.timerAtaque = 22;
+        d.cooldownAtaque = 30;
+        if(Math.abs(d.x - p.x) < 90){
+          golpearC(p, 10);
+        }
+      }
+    } else {
+      let velocidad = dist > 0 ? 1.8 : -1.8;
+      d.vx = velocidad;
+      if(Math.abs(dist) > 300 && d.enSuelo && Math.random() < 0.02){
+        d.vy = -11; d.enSuelo = false;
+      }
+    }
+  }
+
+  function golpear(obj, dano, tipo){
+    obj.vida -= dano;
+    obj.timerDano = 12;
+    combo++;
+    danoTotal += dano;
+    if(combo > mejorCombo) mejorCombo = combo;
+    spawnParticulas(obj.x, obj.y - 30, tipo === 'cross' ? '#ff8800' : '#00D4FF', 8);
+  }
+
+  function golpearC(obj, dano){
+    if(obj.recibeDano) return;
+    obj.vida -= dano;
+    obj.timerDano = 10;
+    spawnParticulas(obj.x, obj.y - 30, '#ff4d6d', 6);
+  }
+
+  function spawnParticulas(x, y, color, n){
+    for(let i = 0; i < n; i++){
+      particulas.push({
+        x: x, y: y,
+        vx: (Math.random() - 0.5) * 6,
+        vy: (Math.random() - 1) * 4,
+        life: 15 + Math.random() * 15,
+        color: color,
+        size: 3 + Math.random() * 4
+      });
+    }
+  }
+
+  function actualizarBarras(){
+    let jv = Math.max(0, cadeteJugador.vida);
+    let dv = Math.max(0, dron.vida);
+    barraJugador.style.width = jv + '%';
+    barraDron.style.width = dv + '%';
+    vidaJugadorTxt.textContent = jv;
+    vidaDronTxt.textContent = dv;
+  }
+
+  function dibujar(){
+    ctx.fillStyle = '#060d20';
+    ctx.fillRect(0, 0, W, H);
+
+    dibujarEstrellas();
+    dibujarSuelo();
+    dibujarPersonaje(cadeteJugador, true);
+    dibujarPersonaje(dron, false);
+    dibujarParticulas();
+  }
+
+  let estrellas = [];
+  for(let i = 0; i < 60; i++){
+    estrellas.push({x: Math.random()*W, y: Math.random()*(H-80), s: Math.random()*2+0.5, b: Math.random()});
+  }
+
+  function dibujarEstrellas(){
+    estrellas.forEach(function(e){
+      let brillo = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(Date.now() * 0.002 + e.b * 10));
+      ctx.fillStyle = 'rgba(0,212,255,' + brillo + ')';
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, e.s, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  function dibujarSuelo(){
+    ctx.fillStyle = 'rgba(0,212,255,0.08)';
+    ctx.fillRect(0, GROUND + 70, W, 30);
+    ctx.strokeStyle = 'rgba(0,212,255,0.3)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, GROUND + 70);
+    ctx.lineTo(W, GROUND + 70);
+    ctx.stroke();
+  }
+
+  function dibujarPersonaje(p, esCadete){
+    let px = p.x - p.w / 2;
+    let py = p.y - p.h;
+
+    if(p.recibeDano){
+      ctx.globalAlpha = 0.5;
+    }
+
+    if(p.agachado){
+      p.h = 40;
+      py = p.y - p.h;
+    } else {
+      p.h = 70;
+    }
+
+    ctx.fillStyle = p.color;
+    ctx.shadowColor = p.color;
+    ctx.shadowBlur = 12;
+
+    ctx.fillRect(px + 8, py, p.w - 16, p.h * 0.5);
+
+    ctx.fillStyle = '#0B132B';
+    ctx.fillRect(px + 4, py + 6, p.w - 8, 8);
+
+    if(p.atacando){
+      let brazoX = esCadete ? px + p.w : px - 20;
+      ctx.fillStyle = p.color;
+      if(p.tipoAtaque === 'patada'){
+        ctx.fillRect(px + 8, py + p.h * 0.7, p.w - 8, 6);
+        ctx.fillRect(px + (esCadete ? p.w - 4 : -16), py + p.h * 0.65, 20, 6);
+      } else {
+        ctx.fillRect(brazoX, py + 12, 22, 6);
+        if(p.tipoAtaque === 'cross'){
+          ctx.fillRect(brazoX, py + 6, 28, 6);
+        }
+      }
+    } else {
+      ctx.fillStyle = p.color;
+      ctx.fillRect(px + 2, py + 14, 6, 24);
+      ctx.fillRect(px + p.w - 8, py + 14, 6, 24);
+    }
+
+    ctx.fillRect(px + 10, py + p.h - 20, 8, 20);
+    ctx.fillRect(px + p.w - 18, py + p.h - 20, 8, 20);
+
+    ctx.fillStyle = '#0B132B';
+    ctx.shadowBlur = 0;
+    ctx.fillRect(px + 12, py + 2, 4, 4);
+    ctx.fillRect(px + 24, py + 2, 4, 4);
+
+    if(p.atacando){
+      let flash = p.timerAtaque > (p.tipoAtaque === 'cross' ? 14 : 8);
+      if(flash){
+        ctx.fillStyle = 'rgba(255,255,255,0.6)';
+        let r = 15 + Math.random() * 10;
+        let ax = esCadete ? px + p.w + 5 : px - 15;
+        ctx.beginPath();
+        ctx.arc(ax, py + 20, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+  }
+
+  function dibujarParticulas(){
+    particulas.forEach(function(p){
+      ctx.globalAlpha = p.life / 30;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  function finalizarCombate(victoria){
+    jugando = false;
+    if(intervaloJuego) cancelAnimationFrame(intervaloJuego);
+
+    let tiempo = Math.round((Date.now() - tiempoInicio) / 1000);
+    let estrellas = 0;
+    if(victoria){
+      estrellas = 1;
+      if(cadeteJugador.vida >= 50) estrellas = 2;
+      if(cadeteJugador.vida >= 80) estrellas = 3;
+    }
+
+    let misiones = JSON.parse(localStorage.getItem('misiones') || '[]');
+    misiones.push({
+      resultado: victoria ? 'VICTORIA' : 'DERROTA',
+      estrellas: estrellas,
+      dano: danoTotal,
+      mejorCombo: mejorCombo,
+      tiempo: tiempo,
+      fecha: new Date().toLocaleString()
+    });
+    localStorage.setItem('misiones', JSON.stringify(misiones));
+
+    overlay.style.display = 'flex';
+    ovTitulo.textContent = victoria ? '🏆 ¡VICTORIA!' : '💀 DERROTA';
+    ovTexto.textContent = victoria
+      ? 'Has derrotado al DRON MK-9. La academia está a salvo.'
+      : 'El DRON ha vencido. Entrena más y vuelve a intentarlo.';
+    ovStats.style.display = 'flex';
+    ovDano.textContent = danoTotal;
+    ovCombo.textContent = mejorCombo;
+    ovTiempo.textContent = tiempo + 's';
+    btnAccion.textContent = victoria ? 'Volver a pelear' : 'Reintentar';
+  }
+
+  btnAccion.addEventListener('click', function(){
+    overlay.style.display = 'none';
+    ovStats.style.display = 'none';
+    iniciarCombate();
+  });
+})();
+</script>
+</body>
+</html>

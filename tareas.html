@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Misiones · Academia Espacial</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+  :root{--fondo:#0B132B;--texto:#F8F9FA;--acento:#00D4FF;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Poppins',sans-serif;background:var(--fondo);color:var(--texto);min-height:100vh;display:flex;flex-direction:column;
+    background-image:radial-gradient(circle at 20% 15%,rgba(0,212,255,.10),transparent 40%),radial-gradient(circle at 80% 85%,rgba(0,212,255,.07),transparent 40%);}
+  .encabezado{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;padding:18px 30px;border-bottom:1px solid rgba(0,212,255,.25);}
+  .logo{font-size:20px;font-weight:800;letter-spacing:1px;color:var(--acento);text-decoration:none;}
+  .navegacion{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .nav-link{color:var(--texto);text-decoration:none;padding:8px 14px;border:1px solid transparent;border-radius:12px;transition:all .3s;font-size:14px;}
+  .nav-link:hover{color:var(--acento);border-color:var(--acento);}
+  .nav-link.activo{background:rgba(0,212,255,.15);color:var(--acento);}
+  .btn{display:inline-block;font-family:inherit;font-size:16px;padding:12px 24px;color:var(--acento);background:transparent;border:2px solid var(--acento);border-radius:12px;cursor:pointer;text-decoration:none;transition:all .3s ease;text-align:center;}
+  .btn:hover{background:var(--acento);color:#0B132B;box-shadow:0 0 18px rgba(0,212,255,.7);transform:translateY(-2px);}
+  .btn-mini{padding:8px 14px;font-size:14px;}
+  .btn-primario{background:var(--acento);color:#0B132B;border-color:var(--acento);font-weight:600;}
+  .btn-primario:hover{box-shadow:0 0 18px rgba(0,212,255,.7);}
+  .btn-peligro{border-color:#ff4d6d;color:#ff4d6d;}
+  .btn-peligro:hover{background:#ff4d6d;color:#fff;}
+  .contenido{flex:1;width:100%;max-width:700px;margin:0 auto;padding:40px 24px;}
+  h1{font-size:36px;text-align:center;margin-bottom:6px;}
+  .sub{text-align:center;opacity:.85;margin:10px auto 30px;font-size:15px;}
+  .tarjeta-form{width:100%;background:rgba(255,255,255,.03);border:1px solid rgba(0,212,255,.3);border-radius:16px;padding:24px;margin-bottom:30px;}
+  .campo-fila{display:flex;gap:12px;align-items:center;}
+  input[type="text"]{flex:1;font-family:inherit;font-size:16px;padding:12px 14px;background:rgba(255,255,255,.06);border:2px solid rgba(0,212,255,.4);border-radius:12px;color:var(--texto);outline:none;transition:all .3s;}
+  input[type="text"]:focus{border-color:var(--acento);box-shadow:0 0 12px rgba(0,212,255,.35);}
+  .lista-tareas{list-style:none;display:flex;flex-direction:column;gap:12px;}
+  .tarea-item{display:flex;align-items:center;gap:12px;padding:14px 18px;background:rgba(255,255,255,.04);border:1px solid rgba(0,212,255,.2);border-radius:12px;transition:all .3s;}
+  .tarea-item:hover{border-color:var(--acento);}
+  .tarea-item.completada .tarea-texto{text-decoration:line-through;opacity:.5;}
+  .tarea-check{width:22px;height:22px;border:2px solid rgba(0,212,255,.5);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0;}
+  .tarea-check:hover{border-color:var(--acento);}
+  .tarea-check.hecha{background:var(--acento);border-color:var(--acento);}
+  .tarea-texto{flex:1;font-size:15px;}
+  .btn-borrar{background:none;border:none;color:#ff4d6d;font-size:20px;cursor:pointer;padding:4px 8px;border-radius:8px;transition:all .3s;}
+  .btn-borrar:hover{background:rgba(255,77,109,.2);}
+  .vacio{text-align:center;opacity:.5;padding:40px;font-size:15px;}
+  footer{text-align:center;padding:20px;opacity:.55;font-size:14px;border-top:1px solid rgba(0,212,255,.2);}
+  @media(max-width:600px){
+    h1{font-size:28px;}
+    .encabezado{justify-content:center;}
+    .campo-fila{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+  <header class="encabezado">
+    <a href="index.html" class="logo">🚀 Academia Espacial</a>
+    <nav class="navegacion">
+      <a href="index.html" class="nav-link">Menú</a>
+      <a href="juego.html" class="nav-link">Combate</a>
+      <a href="diario.html" class="nav-link">Diario</a>
+      <a href="tareas.html" class="nav-link activo">Tareas</a>
+      <a href="historial.html" class="nav-link">Historial</a>
+      <button class="btn btn-mini" id="btn-salir">Salir</button>
+    </nav>
+  </header>
+
+  <main class="contenido">
+    <h1>✅ Misiones de Tarea</h1>
+    <p class="sub">Organiza tus pendientes. Cada tarea completada es un paso hacia la graduación espacial.</p>
+
+    <div class="tarjeta-form">
+      <form id="form-tarea" class="campo-fila">
+        <input type="text" id="tarea-input" placeholder="Escribe una nueva misión..." required autocomplete="off">
+        <button type="submit" class="btn btn-primario">Agregar</button>
+      </form>
+    </div>
+
+    <ul id="lista-tareas" class="lista-tareas"></ul>
+    <p id="vacio-msg" class="vacio">No hay misiones pendientes. Agrega una nueva.</p>
+  </main>
+
+  <footer>Academia Espacial · Sector 9-A · 3026</footer>
+
+<script>
+  const cadete = JSON.parse(localStorage.getItem('cadete'));
+  if(!cadete){ location.href = 'registro.html'; }
+
+  document.getElementById('btn-salir').addEventListener('click', function(){
+    sessionStorage.removeItem('sesion');
+    location.href = 'registro.html';
+  });
+
+  let tareas = JSON.parse(localStorage.getItem('tareas') || '[]');
+
+  const lista = document.getElementById('lista-tareas');
+  const vacioMsg = document.getElementById('vacio-msg');
+  const form = document.getElementById('form-tarea');
+  const input = document.getElementById('tarea-input');
+
+  function guardar(){ localStorage.setItem('tareas', JSON.stringify(tareas)); }
+
+  function renderizar(){
+    lista.innerHTML = '';
+    if(tareas.length === 0){ vacioMsg.style.display = 'block'; return; }
+    vacioMsg.style.display = 'none';
+    tareas.forEach(function(t, i){
+      const li = document.createElement('li');
+      li.className = 'tarea-item' + (t.hecha ? ' completada' : '');
+
+      const check = document.createElement('div');
+      check.className = 'tarea-check' + (t.hecha ? ' hecha' : '');
+      check.innerHTML = t.hecha ? '✓' : '';
+      check.addEventListener('click', function(){
+        tareas[i].hecha = !tareas[i].hecha;
+        guardar(); renderizar();
+      });
+
+      const texto = document.createElement('span');
+      texto.className = 'tarea-texto';
+      texto.textContent = t.texto;
+
+      const borrar = document.createElement('button');
+      borrar.className = 'btn-borrar';
+      borrar.textContent = '✕';
+      borrar.addEventListener('click', function(){
+        tareas.splice(i, 1);
+        guardar(); renderizar();
+      });
+
+      li.appendChild(check);
+      li.appendChild(texto);
+      li.appendChild(borrar);
+      lista.appendChild(li);
+    });
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const texto = input.value.trim();
+    if(!texto) return;
+    tareas.push({texto: texto, hecha: false, fecha: new Date().toLocaleString()});
+    input.value = '';
+    guardar(); renderizar();
+  });
+
+  renderizar();
+</script>
+</body>
+</html>

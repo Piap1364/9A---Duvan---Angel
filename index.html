@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menú · Academia Espacial</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+  :root{--fondo:#0B132B;--texto:#F8F9FA;--acento:#00D4FF;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Poppins',sans-serif;background-color:var(--fondo);color:var(--texto);min-height:100vh;display:flex;flex-direction:column;
+    background-image:radial-gradient(circle at 15% 20%,rgba(0,212,255,.08),transparent 40%),radial-gradient(circle at 85% 80%,rgba(0,212,255,.06),transparent 40%);}
+  .encabezado{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;padding:18px 30px;border-bottom:1px solid rgba(0,212,255,.25);}
+  .logo{font-size:20px;font-weight:800;letter-spacing:1px;color:var(--acento);text-decoration:none;}
+  .navegacion{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .nav-link{color:var(--texto);text-decoration:none;padding:8px 14px;border:1px solid transparent;border-radius:12px;transition:all .3s;font-size:14px;}
+  .nav-link:hover{color:var(--acento);border-color:var(--acento);}
+  .nav-link.activo{background:rgba(0,212,255,.15);color:var(--acento);}
+  .btn{display:inline-block;font-family:inherit;font-size:16px;padding:12px 24px;color:var(--acento);background:transparent;border:2px solid var(--acento);border-radius:12px;cursor:pointer;text-decoration:none;transition:all .3s ease;text-align:center;}
+  .btn:hover{background:var(--acento);color:#0B132B;box-shadow:0 0 18px rgba(0,212,255,.7);transform:translateY(-2px);}
+  .btn-mini{padding:8px 14px;font-size:14px;}
+  h1{font-size:40px;text-align:center;}
+  h2{font-size:28px;}
+  .contenido{flex:1;width:100%;max-width:1100px;margin:0 auto;padding:40px 24px;}
+  .sub{text-align:center;opacity:.85;margin:10px auto 30px;max-width:640px;}
+  .resumen{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:40px;}
+  .stat{text-align:center;border:1px solid rgba(0,212,255,.3);border-radius:16px;padding:16px 28px;min-width:120px;background:rgba(255,255,255,.03);}
+  .stat span{display:block;font-size:30px;font-weight:800;color:var(--acento);}
+  .stat small{opacity:.75;}
+  .tarjetas{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;}
+  .tarjeta{display:flex;flex-direction:column;gap:12px;padding:28px;border:1px solid rgba(0,212,255,.35);border-radius:16px;background:rgba(255,255,255,.03);text-decoration:none;color:var(--texto);transition:all .3s;}
+  .tarjeta:hover{transform:translateY(-6px);border-color:var(--acento);box-shadow:0 0 24px rgba(0,212,255,.25);}
+  .tarjeta .icono{font-size:34px;}
+  .tarjeta p{opacity:.8;font-size:14px;flex:1;}
+  .tarjeta .btn{align-self:flex-start;}
+  footer{text-align:center;padding:20px;opacity:.55;font-size:14px;border-top:1px solid rgba(0,212,255,.2);}
+  @media(max-width:600px){
+    h1{font-size:28px;}
+    .encabezado{justify-content:center;}
+  }
+</style>
+</head>
+<body>
+  <header class="encabezado">
+    <a href="index.html" class="logo">🚀 Academia Espacial</a>
+    <nav class="navegacion">
+      <a href="index.html" class="nav-link activo">Menú</a>
+      <a href="juego.html" class="nav-link">Combate</a>
+      <a href="diario.html" class="nav-link">Diario</a>
+      <a href="tareas.html" class="nav-link">Tareas</a>
+      <a href="historial.html" class="nav-link">Historial</a>
+      <button class="btn btn-mini" id="btn-salir">Salir</button>
+    </nav>
+  </header>
+
+  <main class="contenido">
+    <h1>Bienvenido, <span id="nombre-cadete">Cadete</span></h1>
+    <p class="sub">La Academia Espacial te encomienda sus misiones. Entrena en el combate orbital, registra tu diario, organiza tus tareas y forja tu leyenda.</p>
+
+    <div class="resumen">
+      <div class="stat"><span id="st-combates">0</span><small>Combates</small></div>
+      <div class="stat"><span id="st-victorias">0</span><small>Victorias</small></div>
+      <div class="stat"><span id="st-estrellas">0</span><small>Estrellas</small></div>
+    </div>
+
+    <div class="tarjetas">
+      <a href="juego.html" class="tarjeta">
+        <span class="icono">⚔️</span>
+        <h2>Combate Orbital</h2>
+        <p>Enfrenta al DRON de entrenamiento en la arena espacial. Jab, cross, patadas y esquivas: demuestra tu valor.</p>
+        <span class="btn">Ir al combate</span>
+      </a>
+      <a href="diario.html" class="tarjeta">
+        <span class="icono">📓</span>
+        <h2>Diario del Cadete</h2>
+        <p>Escribe tus reflexiones con título y fecha. Tus entradas se guardan y puedes borrarlas cuando quieras.</p>
+        <span class="btn">Abrir diario</span>
+      </a>
+      <a href="tareas.html" class="tarjeta">
+        <span class="icono">✅</span>
+        <h2>Misiones de Tarea</h2>
+        <p>Organiza tus pendientes: agrega tareas, márcalas como hechas y elimínalas al completarlas.</p>
+        <span class="btn">Ver tareas</span>
+      </a>
+      <a href="historial.html" class="tarjeta">
+        <span class="icono">🏆</span>
+        <h2>Historial</h2>
+        <p>Revisa todos tus combates, estrellas obtenidas y récords de combos alcanzados.</p>
+        <span class="btn">Ver historial</span>
+      </a>
+    </div>
+  </main>
+
+  <footer>Academia Espacial · Sector 9-A · 3026</footer>
+
+<script>
+  const cadete = JSON.parse(localStorage.getItem('cadete'));
+  if(!cadete){ location.href = 'registro.html'; }
+  document.getElementById('nombre-cadete').textContent = cadete ? cadete.nombre : 'Cadete';
+  document.getElementById('btn-salir').addEventListener('click', function(){
+    sessionStorage.removeItem('sesion');
+    location.href = 'registro.html';
+  });
+  const misiones = JSON.parse(localStorage.getItem('misiones') || '[]');
+  const victorias = misiones.filter(m => m.resultado === 'VICTORIA');
+  const estrellas = victorias.reduce((a,m) => a + (m.estrellas||0), 0);
+  document.getElementById('st-combates').textContent = misiones.length;
+  document.getElementById('st-victorias').textContent = victorias.length;
+  document.getElementById('st-estrellas').textContent = estrellas;
+</script>
+</body>
+</html>

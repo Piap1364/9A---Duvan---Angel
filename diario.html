@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diario · Academia Espacial</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+  :root{--fondo:#0B132B;--texto:#F8F9FA;--acento:#00D4FF;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Poppins',sans-serif;background:var(--fondo);color:var(--texto);min-height:100vh;display:flex;flex-direction:column;
+    background-image:radial-gradient(circle at 20% 15%,rgba(0,212,255,.10),transparent 40%),radial-gradient(circle at 80% 85%,rgba(0,212,255,.07),transparent 40%);}
+  .encabezado{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;padding:18px 30px;border-bottom:1px solid rgba(0,212,255,.25);}
+  .logo{font-size:20px;font-weight:800;letter-spacing:1px;color:var(--acento);text-decoration:none;}
+  .navegacion{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .nav-link{color:var(--texto);text-decoration:none;padding:8px 14px;border:1px solid transparent;border-radius:12px;transition:all .3s;font-size:14px;}
+  .nav-link:hover{color:var(--acento);border-color:var(--acento);}
+  .nav-link.activo{background:rgba(0,212,255,.15);color:var(--acento);}
+  .btn{display:inline-block;font-family:inherit;font-size:16px;padding:12px 24px;color:var(--acento);background:transparent;border:2px solid var(--acento);border-radius:12px;cursor:pointer;text-decoration:none;transition:all .3s ease;text-align:center;}
+  .btn:hover{background:var(--acento);color:#0B132B;box-shadow:0 0 18px rgba(0,212,255,.7);transform:translateY(-2px);}
+  .btn-mini{padding:8px 14px;font-size:14px;}
+  .btn-primario{background:var(--acento);color:#0B132B;border-color:var(--acento);font-weight:600;}
+  .btn-peligro{border-color:#ff4d6d;color:#ff4d6d;}
+  .btn-peligro:hover{background:#ff4d6d;color:#fff;}
+  .contenido{flex:1;width:100%;max-width:700px;margin:0 auto;padding:40px 24px;}
+  h1{font-size:36px;text-align:center;margin-bottom:6px;}
+  .sub{text-align:center;opacity:.85;margin:10px auto 30px;font-size:15px;}
+  .tarjeta-form{width:100%;background:rgba(255,255,255,.03);border:1px solid rgba(0,212,255,.3);border-radius:16px;padding:24px;margin-bottom:30px;}
+  .campo{width:100%;margin-bottom:14px;}
+  label{display:block;font-size:14px;margin-bottom:6px;opacity:.9;}
+  input[type="text"]{width:100%;font-family:inherit;font-size:16px;padding:12px 14px;background:rgba(255,255,255,.06);border:2px solid rgba(0,212,255,.4);border-radius:12px;color:var(--texto);outline:none;transition:all .3s;}
+  input[type="text"]:focus{border-color:var(--acento);box-shadow:0 0 12px rgba(0,212,255,.35);}
+  textarea{width:100%;font-family:inherit;font-size:16px;padding:12px 14px;background:rgba(255,255,255,.06);border:2px solid rgba(0,212,255,.4);border-radius:12px;color:var(--texto);outline:none;transition:all .3s;resize:vertical;min-height:120px;}
+  textarea:focus{border-color:var(--acento);box-shadow:0 0 12px rgba(0,212,255,.35);}
+  .lista-entradas{display:flex;flex-direction:column;gap:16px;}
+  .entrada-item{padding:20px;background:rgba(255,255,255,.04);border:1px solid rgba(0,212,255,.2);border-radius:16px;transition:all .3s;}
+  .entrada-item:hover{border-color:var(--acento);}
+  .entrada-cabecera{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;}
+  .entrada-titulo{font-size:18px;font-weight:600;color:var(--acento);}
+  .entrada-fecha{font-size:12px;opacity:.6;white-space:nowrap;}
+  .entrada-contenido{font-size:14px;line-height:1.7;opacity:.85;white-space:pre-wrap;}
+  .btn-borrar{background:none;border:none;color:#ff4d6d;font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px;transition:all .3s;}
+  .btn-borrar:hover{background:rgba(255,77,109,.2);}
+  .vacio{text-align:center;opacity:.5;padding:40px;font-size:15px;}
+  footer{text-align:center;padding:20px;opacity:.55;font-size:14px;border-top:1px solid rgba(0,212,255,.2);}
+  @media(max-width:600px){
+    h1{font-size:28px;}
+    .encabezado{justify-content:center;}
+  }
+</style>
+</head>
+<body>
+  <header class="encabezado">
+    <a href="index.html" class="logo">🚀 Academia Espacial</a>
+    <nav class="navegacion">
+      <a href="index.html" class="nav-link">Menú</a>
+      <a href="juego.html" class="nav-link">Combate</a>
+      <a href="diario.html" class="nav-link activo">Diario</a>
+      <a href="tareas.html" class="nav-link">Tareas</a>
+      <a href="historial.html" class="nav-link">Historial</a>
+      <button class="btn btn-mini" id="btn-salir">Salir</button>
+    </nav>
+  </header>
+
+  <main class="contenido">
+    <h1>📓 Diario del Cadete</h1>
+    <p class="sub">Registra tus reflexiones, estrategias y vivencias de la misión.</p>
+
+    <div class="tarjeta-form">
+      <form id="form-entrada">
+        <div class="campo">
+          <label for="titulo-input">Título de la entrada</label>
+          <input type="text" id="titulo-input" placeholder="Ej: Día de entrenamiento intensivo..." required autocomplete="off">
+        </div>
+        <div class="campo">
+          <label for="contenido-input">Reflexión</label>
+          <textarea id="contenido-input" placeholder="Escribe aquí lo que viviste hoy en la academia..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primario">Guardar entrada</button>
+      </form>
+    </div>
+
+    <div id="lista-entradas" class="lista-entradas"></div>
+    <p id="vacio-msg" class="vacio">No hay entradas aún. Escribe tu primera reflexión.</p>
+  </main>
+
+  <footer>Academia Espacial · Sector 9-A · 3026</footer>
+
+<script>
+  const cadete = JSON.parse(localStorage.getItem('cadete'));
+  if(!cadete){ location.href = 'registro.html'; }
+
+  document.getElementById('btn-salir').addEventListener('click', function(){
+    sessionStorage.removeItem('sesion');
+    location.href = 'registro.html';
+  });
+
+  let entradas = JSON.parse(localStorage.getItem('diario') || '[]');
+
+  const listaDiv = document.getElementById('lista-entradas');
+  const vacioMsg = document.getElementById('vacio-msg');
+  const form = document.getElementById('form-entrada');
+  const tituloInput = document.getElementById('titulo-input');
+  const contenidoInput = document.getElementById('contenido-input');
+
+  function guardar(){ localStorage.setItem('diario', JSON.stringify(entradas)); }
+
+  function renderizar(){
+    listaDiv.innerHTML = '';
+    if(entradas.length === 0){ vacioMsg.style.display = 'block'; return; }
+    vacioMsg.style.display = 'none';
+    entradas.forEach(function(e, i){
+      const div = document.createElement('div');
+      div.className = 'entrada-item';
+
+      const cabecera = document.createElement('div');
+      cabecera.className = 'entrada-cabecera';
+
+      const titulo = document.createElement('span');
+      titulo.className = 'entrada-titulo';
+      titulo.textContent = e.titulo;
+
+      const derecha = document.createElement('div');
+      derecha.style.cssText = 'display:flex;align-items:center;gap:8px;';
+
+      const fecha = document.createElement('span');
+      fecha.className = 'entrada-fecha';
+      fecha.textContent = e.fecha;
+
+      const borrar = document.createElement('button');
+      borrar.className = 'btn-borrar';
+      borrar.textContent = '✕';
+      borrar.addEventListener('click', function(){
+        entradas.splice(i, 1);
+        guardar(); renderizar();
+      });
+
+      derecha.appendChild(fecha);
+      derecha.appendChild(borrar);
+      cabecera.appendChild(titulo);
+      cabecera.appendChild(derecha);
+
+      const contenido = document.createElement('div');
+      contenido.className = 'entrada-contenido';
+      contenido.textContent = e.contenido;
+
+      div.appendChild(cabecera);
+      div.appendChild(contenido);
+      listaDiv.appendChild(div);
+    });
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const titulo = tituloInput.value.trim();
+    const contenido = contenidoInput.value.trim();
+    if(!titulo || !contenido) return;
+    entradas.unshift({titulo: titulo, contenido: contenido, fecha: new Date().toLocaleString()});
+    tituloInput.value = '';
+    contenidoInput.value = '';
+    guardar(); renderizar();
+  });
+
+  renderizar();
+</script>
+</body>
+</html>
